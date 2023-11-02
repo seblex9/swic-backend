@@ -9,9 +9,9 @@ export const handleSignup = async (req, res) => {
 
 export const handleForeignStatus = async (req, res) => {
   try {
-    const { foreignStatus } = req.body;
+    const { isForeignPassportHolder } = req.body;
 
-    req.member.foreignStatus = foreignStatus;
+    req.member.isForeignPassportHolder = isForeignPassportHolder;
     await req.member.save();
 
     res.status(200).json({
@@ -47,11 +47,12 @@ export const handleDetails = async (req, res) => {
   }
 };
 
-export const handleWorkAndChildren = async (req, res) => {
+// work and children
+export const handleAvailability = async (req, res) => {
   try {
-    const { workStatus, hasChildren, childrenAgeGroup } = req.body;
+    const { worksOnWeekdays, hasChildren, childrenAgeGroup } = req.body;
 
-    req.member.workStatus = workStatus;
+    req.member.worksOnWeekdays = worksOnWeekdays;
     req.member.hasChildren = hasChildren;
     req.member.childrenAgeGroup = childrenAgeGroup;
 
@@ -66,11 +67,11 @@ export const handleWorkAndChildren = async (req, res) => {
   }
 };
 
-export const handleActivities = async (req, res) => {
+export const handleInterests = async (req, res) => {
   try {
-    const { activities } = req.body; // This should be an array of chosen activities
+    const { interestedActivities } = req.body;
 
-    req.member.activities = activities;
+    req.member.interestedActivities = interestedActivities;
     await req.member.save();
 
     res.status(200).json({
@@ -82,11 +83,11 @@ export const handleActivities = async (req, res) => {
   }
 };
 
-export const handleNewActivity = async (req, res) => {
+export const handleLeadActivity = async (req, res) => {
   try {
-    const { newActivity } = req.body;
+    const { leadingActivitiesInterest } = req.body;
 
-    req.member.newActivity = newActivity;
+    req.member.leadingActivitiesInterest = leadingActivitiesInterest;
     await req.member.save();
 
     res.status(200).json({
@@ -100,10 +101,9 @@ export const handleNewActivity = async (req, res) => {
 
 export const handleFeedback = async (req, res) => {
   try {
-    const { feedbackSource, feedbackText } = req.body;
+    const { feedback } = req.body;
 
-    req.member.feedbackSource = feedbackSource;
-    req.member.feedbackText = feedbackText;
+    req.member.feedback = feedback;
 
     await req.member.save();
 
@@ -116,17 +116,17 @@ export const handleFeedback = async (req, res) => {
   }
 };
 
-export const handleTermsAndConditions = async (req, res) => {
+export const handleTerms = async (req, res) => {
   try {
-    const { agreement } = req.body;
+    const { acceptedTermsAndConditions } = req.body;
 
-    if (!agreement || agreement !== 'agree') {
+    if (!acceptedTermsAndConditions || acceptedTermsAndConditions !== 'agree') {
       return res.status(400).json({
         error: 'You must agree to the terms and conditions to proceed.',
       });
     }
 
-    req.member.agreedToTerms = true;
+    req.member.acceptedTermsAndConditions = true;
     await req.member.save();
 
     res.status(200).json({

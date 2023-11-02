@@ -14,7 +14,7 @@ app.use(express.json());
 app.use('/api/v1/members', memberRoutes);
 
 app.get('/', (req, res) => {
-  res.status(200);
+  // res.status(200);
   res.send('swic home');
 });
 
