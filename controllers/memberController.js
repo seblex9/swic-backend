@@ -1,5 +1,4 @@
 import Member from '../models/memberModel.js';
-import generateToken from '../utils/generateToken.js';
 
 export const handleSignup = async (req, res) => {
   res
@@ -16,7 +15,6 @@ export const handleForeignStatus = async (req, res) => {
 
     res.status(200).json({
       message: 'Foreign status recorded. Proceed to next step.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
     res.status(500).json({ error: 'Server Error.' });
@@ -40,7 +38,6 @@ export const handleDetails = async (req, res) => {
 
     res.status(200).json({
       message: 'Details recorded. Proceed to next step.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
     res.status(500).json({ error: 'Server Error.' });
@@ -51,6 +48,9 @@ export const handleDetails = async (req, res) => {
 export const handleAvailability = async (req, res) => {
   try {
     const { worksOnWeekdays, hasChildren, childrenAgeGroup } = req.body;
+    console.log(worksOnWeekdays);
+    console.log(hasChildren);
+    console.log(childrenAgeGroup);
 
     req.member.worksOnWeekdays = worksOnWeekdays;
     req.member.hasChildren = hasChildren;
@@ -60,9 +60,9 @@ export const handleAvailability = async (req, res) => {
 
     res.status(200).json({
       message: 'Work and children data saved. Proceed to next step.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };
@@ -76,7 +76,6 @@ export const handleInterests = async (req, res) => {
 
     res.status(200).json({
       message: 'Activity preferences saved. Proceed to next step.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
     res.status(500).json({ error: 'Server Error.' });
@@ -92,7 +91,6 @@ export const handleLeadActivity = async (req, res) => {
 
     res.status(200).json({
       message: 'New activity interests saved. Proceed to next step.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
     res.status(500).json({ error: 'Server Error.' });
@@ -109,7 +107,6 @@ export const handleFeedback = async (req, res) => {
 
     res.status(200).json({
       message: 'Feedback recorded. Proceed to agree to terms and conditions.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
     res.status(500).json({ error: 'Server Error.' });
@@ -131,7 +128,6 @@ export const handleTerms = async (req, res) => {
 
     res.status(200).json({
       message: 'You have successfully signed up as a member.',
-      token: generateToken(req.member._id),
     });
   } catch (error) {
     res.status(500).json({ error: 'Server Error.' });

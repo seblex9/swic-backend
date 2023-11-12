@@ -23,7 +23,7 @@ const memberSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: function (value) {
-        return value < Date.now();
+        return value > Date.now();
       },
       message: 'Birthday cannot be in the future.',
     },
