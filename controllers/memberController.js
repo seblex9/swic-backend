@@ -1,135 +1,160 @@
 import Member from '../models/memberModel.js';
 
-export const handleSignup = async (req, res) => {
-  res
-    .status(200)
-    .json({ message: 'Signup initiated. Proceed to the next step.' });
+const createOrUpdateMember = async (userId, updateData) => {
+  const member = await Member.findOneAndUpdate(
+    { userAccount: userId },
+    updateData,
+    { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+  );
+  return member;
 };
 
 export const handleForeignStatus = async (req, res) => {
   try {
-    const { isForeignPassportHolder } = req.body;
-
-    req.member.isForeignPassportHolder = isForeignPassportHolder;
-    await req.member.save();
-
+    const member = await createOrUpdateMember(req.body.userId, {
+      isForeignPassportHolder: req.body.isForeignPassportHolder,
+    });
     res.status(200).json({
       message: 'Foreign status recorded. Proceed to next step.',
+      member,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };
 
 export const handleDetails = async (req, res) => {
   try {
-    const { name, email, birthday, nationality, area, phone, wechatID } =
-      req.body;
-
-    req.member.name = name;
-    req.member.email = email;
-    req.member.birthday = birthday;
-    req.member.nationality = nationality;
-    req.member.area = area;
-    req.member.phone = phone;
-    req.member.wechatID = wechatID;
-
-    await req.member.save();
-
-    res.status(200).json({
-      message: 'Details recorded. Proceed to next step.',
+    const {
+      userId,
+      name,
+      email,
+      birthday,
+      nationality,
+      area,
+      phone,
+      wechatID,
+    } = req.body;
+    const member = await createOrUpdateMember(userId, {
+      name,
+      email,
+      birthday,
+      nationality,
+      area,
+      phone,
+      wechatID,
     });
-  } catch (error) {
-    res.status(500).json({ error: 'Server Error.' });
-  }
-};
-
-// work and children
-export const handleAvailability = async (req, res) => {
-  try {
-    const { worksOnWeekdays, hasChildren, childrenAgeGroup } = req.body;
-    console.log(worksOnWeekdays);
-    console.log(hasChildren);
-    console.log(childrenAgeGroup);
-
-    req.member.worksOnWeekdays = worksOnWeekdays;
-    req.member.hasChildren = hasChildren;
-    req.member.childrenAgeGroup = childrenAgeGroup;
-
-    await req.member.save();
-
-    res.status(200).json({
-      message: 'Work and children data saved. Proceed to next step.',
-    });
+    res
+      .status(200)
+      .json({ message: 'Details recorded. Proceed to next step.', member });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };
 
-export const handleInterests = async (req, res) => {
+export const handleAvailability = async (req, res) => {
   try {
-    const { interestedActivities } = req.body;
-
-    req.member.interestedActivities = interestedActivities;
-    await req.member.save();
-
+    const member = await createOrUpdateMember(req.body.userId, {
+      worksOnWeekdays: req.body.worksOnWeekdays,
+      hasChildren: req.body.hasChildren,
+      childrenAgeGroup: req.body.childrenAgeGroup,
+    });
     res.status(200).json({
-      message: 'Activity preferences saved. Proceed to next step.',
+      message: 'Availability data saved. Proceed to next step.',
+      member,
     });
   } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error.' });
+  }
+};
+
+export const handleInterests = async (req, res) => {
+  try {
+    const member = await createOrUpdateMember(req.body.userId, {
+      interestedActivities: req.body.interestedActivities,
+    });
+    res
+      .status(200)
+      .json({ message: 'Interests data saved. Proceed to next step.', member });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };
 
 export const handleLeadActivity = async (req, res) => {
   try {
-    const { leadingActivitiesInterest } = req.body;
-
-    req.member.leadingActivitiesInterest = leadingActivitiesInterest;
-    await req.member.save();
-
+    const member = await createOrUpdateMember(req.body.userId, {
+      leadingActivitiesInterest: req.body.leadingActivitiesInterest,
+    });
     res.status(200).json({
-      message: 'New activity interests saved. Proceed to next step.',
+      message: 'Lead activity data saved. Proceed to next step.',
+      member,
     });
   } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server Error.' });
+  }
+};
+
+export const handleLearnedAbout = async (req, res) => {
+  try {
+    const { userId, learnedAboutSWIC } = req.body;
+
+    if (
+      !learnedAboutSWIC ||
+      !['Online search', 'Friends', 'WeChat', 'Facebook', 'Other'].includes(
+        learnedAboutSWIC
+      )
+    ) {
+      return res
+        .status(400)
+        .json({ message: 'Invalid value for learnedAboutSWIC.' });
+    }
+
+    const member = await createOrUpdateMember(userId, { learnedAboutSWIC });
+    res.status(200).json({
+      message: 'Information on how you learned about SWIC has been recorded.',
+      member,
+    });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };
 
 export const handleFeedback = async (req, res) => {
   try {
-    const { feedback } = req.body;
-
-    req.member.feedback = feedback;
-
-    await req.member.save();
-
+    const member = await createOrUpdateMember(req.body.userId, {
+      feedback: req.body.feedback,
+    });
     res.status(200).json({
       message: 'Feedback recorded. Proceed to agree to terms and conditions.',
+      member,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };
 
 export const handleTerms = async (req, res) => {
   try {
-    const { acceptedTermsAndConditions } = req.body;
-
-    if (!acceptedTermsAndConditions || acceptedTermsAndConditions !== 'agree') {
-      return res.status(400).json({
-        error: 'You must agree to the terms and conditions to proceed.',
-      });
-    }
-
-    req.member.acceptedTermsAndConditions = true;
-    await req.member.save();
-
-    res.status(200).json({
-      message: 'You have successfully signed up as a member.',
+    const { userId, acceptedTermsAndConditions } = req.body;
+    const member = await createOrUpdateMember(userId, {
+      acceptedTermsAndConditions,
     });
+    if (!acceptedTermsAndConditions) {
+      return res.status(400).json({ message: 'Terms must be accepted.' });
+    }
+    res
+      .status(200)
+      .json({ message: 'Terms accepted. Registration complete.', member });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Server Error.' });
   }
 };

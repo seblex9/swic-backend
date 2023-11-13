@@ -1,64 +1,69 @@
 import mongoose from 'mongoose';
 
 const memberSchema = new mongoose.Schema({
+  userAccount: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    unique: true, // Ensures one-to-one relationship
+  },
   isForeignPassportHolder: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   name: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 1,
   },
   email: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     unique: true,
     match: [/^[\w.-]+@\w+\.\w+$/, 'Please enter a valid email address.'],
   },
   birthday: {
     type: Date,
-    required: true,
+    required: false,
     validate: {
       validator: function (value) {
-        return value > Date.now();
+        return value < Date.now();
       },
       message: 'Birthday cannot be in the future.',
     },
   },
   nationality: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 1,
   },
   area: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 1,
   },
   phone: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 1,
   },
   wechatID: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 1,
   },
   worksOnWeekdays: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   hasChildren: {
     type: Boolean,
-    required: true,
+    required: false,
   },
   childrenAgeGroup: {
     type: String,
@@ -75,7 +80,7 @@ const memberSchema = new mongoose.Schema({
   },
   interestedActivities: {
     type: [String],
-    required: true,
+    required: false,
     enum: [
       'Weekday coffee functions',
       'After work functions, e.g. cocktails hours',
@@ -95,7 +100,7 @@ const memberSchema = new mongoose.Schema({
   },
   learnedAboutSWIC: {
     type: String,
-    required: true,
+    required: false,
     enum: ['Online search', 'Friends', 'WeChat', 'Facebook', 'Other'],
   },
   feedback: {
@@ -104,13 +109,17 @@ const memberSchema = new mongoose.Schema({
   },
   acceptedTermsAndConditions: {
     type: Boolean,
-    required: true,
+    required: false,
     validate: {
       validator: function (value) {
         return value === true;
       },
       message: 'You must accept the terms and conditions.',
     },
+  },
+  memberDetails: {
+    coupons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Coupon' }],
+    discounts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discount' }],
   },
 });
 

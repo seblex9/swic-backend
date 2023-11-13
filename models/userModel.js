@@ -7,9 +7,9 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   isMember: { type: Boolean, default: false },
-  memberDetails: {
-    coupons: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Coupon' }],
-    discounts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Discount' }],
+  memberProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Member',
   },
 });
 
