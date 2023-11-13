@@ -4,6 +4,7 @@ import connectDB from './config/db.js';
 import cors from 'cors';
 import memberRoutes from './routes/memberRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api/v1/members', memberRoutes);
 app.use('/api/v1/events', eventRoutes);
+app.use('/api/v1/users', userRoutes);
 
 app.get('/', (req, res) => {
   // res.status(200);
