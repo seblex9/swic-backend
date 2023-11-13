@@ -10,19 +10,6 @@ const memberSchema = new mongoose.Schema({
     type: Boolean,
     required: false,
   },
-  name: {
-    type: String,
-    required: false,
-    trim: true,
-    minlength: 1,
-  },
-  email: {
-    type: String,
-    required: false,
-    trim: true,
-    unique: true,
-    match: [/^[\w.-]+@\w+\.\w+$/, 'Please enter a valid email address.'],
-  },
   birthday: {
     type: Date,
     required: false,
@@ -66,7 +53,7 @@ const memberSchema = new mongoose.Schema({
     required: false,
   },
   childrenAgeGroup: {
-    type: String,
+    type: [String],
     required: function () {
       return this.hasChildren;
     },
@@ -75,7 +62,7 @@ const memberSchema = new mongoose.Schema({
       '2-3 years',
       '6-11 years',
       '12-15 years',
-      '15 years +',
+      '16 years +',
     ],
   },
   interestedActivities: {
@@ -92,14 +79,22 @@ const memberSchema = new mongoose.Schema({
       'Board game activities',
     ],
   },
-  leadingActivitiesInterest: {
+  leadActivityDescription: {
     type: String,
     required: false,
     trim: true,
     minlength: 1,
   },
-  learnedAboutSWIC: {
+  leadActivity: {
+    type: Boolean,
+    required: false,
+  },
+  activity: {
     type: String,
+    trim: true,
+  },
+  learnedAboutSWIC: {
+    type: [String],
     required: false,
     enum: ['Online search', 'Friends', 'WeChat', 'Facebook', 'Other'],
   },
