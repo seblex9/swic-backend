@@ -1,23 +1,23 @@
 import express from 'express';
 import {
+  createEvent,
+  updateEvent,
   listEvents,
   showEvent,
   registerEvent,
-  processPayment,
+  deleteEvent,
+  processEventPayment,
 } from '../controllers/eventController.js';
 
 const router = express.Router();
 
-// List all events
 router.get('/', listEvents);
+router.post('/', createEvent);
 
-// Show single event
 router.get('/:eventId', showEvent);
-
-// Register for an event
+router.patch('/:eventId', updateEvent);
 router.post('/:eventId/register', registerEvent);
-
-// Process payment for an event
-router.post('/:eventId/checkout', processPayment);
+router.post('/:eventId/checkout', processEventPayment);
+router.delete('/:eventId', deleteEvent);
 
 export default router;
