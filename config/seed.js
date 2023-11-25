@@ -26,13 +26,25 @@ const seedDB = async () => {
   await Coupon.deleteMany({});
 
   // Seed new data
-  await User.insertMany(userSeed);
-  await Member.insertMany(memberSeed);
   await Event.insertMany(eventSeed);
+  const wineAndCheeseEvent = await Event.findOne({
+    title: 'Wine and Cheese Soiree',
+  });
+  const majiangSocialEvent = await Event.findOne({
+    title: 'Majiang Social',
+  });
+  await User.insertMany(
+    userSeed.map(user => {
+      if (user.name === 'Alice Johnson') {
+        user.eventsAttended.push(wineAndCheeseEvent._id);
+        user.eventsAttended.push(majiangSocialEvent._id);
+      }
+      return user;
+    })
+  );
+  await Member.insertMany(memberSeed);
   await Discount.insertMany(discountSeed);
   await Coupon.insertMany(couponSeed);
-
-  console.log('Database seeded!');
 };
 
 seedDB().then(() => {

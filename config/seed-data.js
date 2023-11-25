@@ -24,7 +24,7 @@ export const eventSeed = [
     creatorName: 'Mary Jane',
     organizedBy: ['655166c98465b7b8ebbd9602'],
     title: 'Majiang Social',
-    date: new Date('2023-09-10T14:00:00.000Z'),
+    date: new Date('2024-03-10T14:00:00.000Z'),
     capacity: 30,
     address: {
       eng: 'Community Center, 456 Culture Plaza, Futian District, Shenzhen',
