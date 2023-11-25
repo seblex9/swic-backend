@@ -6,8 +6,14 @@ import User from '../models/userModel.js';
 import Member from '../models/memberModel.js';
 import Event from '../models/eventModel.js';
 import Discount from '../models/discountModel.js';
-// import Coupon from './models/couponModel.js';
-import { eventSeed, userSeed, memberSeed, discountSeed } from './seed-data.js';
+import Coupon from '../models/couponModel.js';
+import {
+  eventSeed,
+  userSeed,
+  memberSeed,
+  discountSeed,
+  couponSeed,
+} from './seed-data.js';
 
 const seedDB = async () => {
   await connectDB();
@@ -17,14 +23,14 @@ const seedDB = async () => {
   await Member.deleteMany({});
   await Event.deleteMany({});
   await Discount.deleteMany({});
-  // await Coupon.deleteMany({});
+  await Coupon.deleteMany({});
 
   // Seed new data
   await User.insertMany(userSeed);
   await Member.insertMany(memberSeed);
   await Event.insertMany(eventSeed);
   await Discount.insertMany(discountSeed);
-  // await Coupon.insertMany(couponSeed);
+  await Coupon.insertMany(couponSeed);
 
   console.log('Database seeded!');
 };

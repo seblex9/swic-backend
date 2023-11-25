@@ -152,4 +152,52 @@ export const discountSeed = [
   },
 ];
 
+export const couponSeed = [
+  {
+    retailer: 'Elegant Attire',
+    code: 'WELCOME10',
+    description: '10% off for new members on their first apparel purchase.',
+    discountPercentage: 10,
+    expirationDate: '2024-01-01T00:00:00.000Z',
+    isActive: true,
+    isUsed: false,
+  },
+  {
+    retailer: 'Happy Hour Cafe',
+    code: 'HAPPYHOUR20',
+    description: '20% discount on all beverages during happy hour.',
+    discountPercentage: 20,
+    expirationDate: '2024-06-01T00:00:00.000Z',
+    isActive: true,
+    isUsed: false,
+  },
+  {
+    retailer: 'Book Bonanza',
+    code: '50OFFBOOKS',
+    description: '50 RMB off your next book purchase.',
+    discountAmount: 50,
+    expirationDate: '2023-12-31T00:00:00.000Z',
+    isActive: true,
+    isUsed: false,
+  },
+  {
+    retailer: 'Spring Flowers',
+    code: 'SPRINGFLING30',
+    description: '30% off on all floral arrangements during spring.',
+    discountPercentage: 30,
+    expirationDate: '2024-05-01T00:00:00.000Z',
+    isActive: true,
+    isUsed: false,
+  },
+  {
+    retailer: 'Family Fun Zone',
+    code: 'FAMILY100',
+    description: '100 RMB off on family entertainment packages.',
+    discountAmount: 100,
+    expirationDate: '2024-09-01T00:00:00.000Z',
+    isActive: true,
+    isUsed: false,
+  },
+];
+
 export const memberSeed = [];
