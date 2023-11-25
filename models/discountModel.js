@@ -1,10 +1,20 @@
 import mongoose from 'mongoose';
 
 const discountSchema = new mongoose.Schema({
-  retailer: String,
+  retailer: { type: String, required: true },
   description: String,
-  discountAmount: Number,
-  expiryDate: Date,
+  discountAmount: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 100,
+  },
+  expirationDate: { type: Date, required: true },
+  discountCode: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
 
 const Discount = mongoose.model('Discount', discountSchema);

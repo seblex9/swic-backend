@@ -5,6 +5,7 @@ import cors from 'cors';
 import memberRoutes from './routes/memberRoutes.js';
 import eventRoutes from './routes/eventRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import discountRoutes from './routes/discountRoutes.js';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ app.use(express.json());
 app.use('/api/v1/members', memberRoutes);
 app.use('/api/v1/events', eventRoutes);
 app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/discounts', discountRoutes);
 
 app.get('/', (req, res) => {
   // res.status(200);

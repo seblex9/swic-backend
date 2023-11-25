@@ -100,16 +100,55 @@ export const userSeed = [
   {
     name: 'Diana Lee',
     openId: 'dianalee_openid',
-    isMember: true,
+    isMember: false,
     memberProfile: new mongoose.Types.ObjectId(),
     eventsAttended: [],
   },
   {
     name: 'Evelyn Garcia',
     openId: 'evelyngarcia_openid',
-    isMember: true,
+    isMember: false,
     memberProfile: new mongoose.Types.ObjectId(),
     eventsAttended: [],
+  },
+];
+
+export const discountSeed = [
+  {
+    retailer: 'George & Dragon',
+    description: 'Get 20% off all food and drinks.',
+    discountAmount: 20,
+    expirationDate: new Date('2023-12-31T23:59:59.999Z'),
+    discountCode: 'GEORGE',
+  },
+  {
+    retailer: 'Tech Store',
+    description: 'Save 15% on all electronics and gadgets.',
+    discountAmount: 15,
+    expirationDate: new Date('2023-11-30T23:59:59.999Z'),
+    discountCode: 'TECH15',
+  },
+  {
+    retailer: 'Coffee Shop',
+    description: 'Buy one coffee, get the second one free!',
+    discountAmount: 50, // 50% off for the second coffee
+    expirationDate: new Date('2023-10-15T23:59:59.999Z'),
+    discountCode: 'COFFEEBOGO',
+  },
+  {
+    retailer: 'Fitness Center',
+    description: 'Sign up for a 1-year membership and receive 10% off.',
+    discountAmount: 10,
+    expirationDate: new Date('2023-12-15T23:59:59.999Z'),
+    discountCode: 'FITNESS10',
+  },
+  {
+    retailer: 'Bookstore',
+    description:
+      'Purchase 3 or more books and get 25% off your total purchase.',
+    discountAmount: 25,
+    expirationDate: new Date('2023-11-01T23:59:59.999Z'),
+    discountCode: 'BOOKS25',
   },
 ];
 
