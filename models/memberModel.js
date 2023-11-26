@@ -8,9 +8,6 @@ const memberSchema = new mongoose.Schema({
   membershipExpirationDate: {
     type: Date,
     required: [true, 'Membership expiration date is required.'],
-    default: function () {
-      return new Date(this.signupDate.getTime() + 365 * 24 * 60 * 60 * 1000);
-    },
   },
 
   userAccount: {
