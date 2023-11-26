@@ -119,14 +119,12 @@ export const discountSeed = [
     description: 'Get 20% off all food and drinks.',
     discountAmount: 20,
     expirationDate: new Date('2023-12-31T23:59:59.999Z'),
-    discountCode: 'GEORGE',
   },
   {
     retailer: 'Tech Store',
     description: 'Save 15% on all electronics and gadgets.',
     discountAmount: 15,
     expirationDate: new Date('2023-11-30T23:59:59.999Z'),
-    discountCode: 'TECH15',
   },
   {
     retailer: 'Coffee Shop',
@@ -140,7 +138,6 @@ export const discountSeed = [
     description: 'Sign up for a 1-year membership and receive 10% off.',
     discountAmount: 10,
     expirationDate: new Date('2023-12-15T23:59:59.999Z'),
-    discountCode: 'FITNESS10',
   },
   {
     retailer: 'Bookstore',
@@ -148,7 +145,6 @@ export const discountSeed = [
       'Purchase 3 or more books and get 25% off your total purchase.',
     discountAmount: 25,
     expirationDate: new Date('2023-11-01T23:59:59.999Z'),
-    discountCode: 'BOOKS25',
   },
 ];
 
@@ -200,4 +196,37 @@ export const couponSeed = [
   },
 ];
 
-export const memberSeed = [];
+export const memberSeed = [
+  {
+    userAccount: 'ObjectId("someUserId")', // This should be an actual ObjectId of a User document
+    isForeignPassportHolder: false,
+    birthday: new Date('1990-01-01'), // Example birthday
+    nationality: 'Canadian',
+    area: 'Nanshan District',
+    phone: '1234567890',
+    wechatID: 'wechat12345',
+    worksOnWeekdays: true,
+    hasChildren: true,
+    childrenAgeGroup: ['2-3 years', '6-11 years'],
+    interestedActivities: [
+      'Weekday coffee functions',
+      'Weekend social activities',
+      'Cooking activities',
+    ],
+    leadActivityDescription: 'Organizing weekly cooking classes.',
+    leadActivity: true,
+    activity: 'Cooking',
+    learnedAboutSWIC: ['Friends', 'WeChat'],
+    feedback: 'Great community!',
+    acceptedTermsAndConditions: true,
+    memberDetails: {
+      coupons: ['ObjectId("someCouponId1")', 'ObjectId("someCouponId2")'],
+      discounts: ['ObjectId("someDiscountId1")', 'ObjectId("someDiscountId2")'],
+    },
+    // Assuming your schema has these fields for signupDate and membershipExpirationDate
+    signupDate: new Date(),
+    membershipExpirationDate: new Date(
+      new Date().setFullYear(new Date().getFullYear() + 1)
+    ), // One year from now
+  },
+];

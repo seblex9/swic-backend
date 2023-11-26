@@ -1,4 +1,5 @@
 import User from '../models/userModel.js';
+import Member from '../models/memberModel.js';
 import Event from '../models/eventModel.js';
 
 export const handleUserRegistration = async (req, res) => {
@@ -41,13 +42,11 @@ export const handleUserRegistration = async (req, res) => {
         }
       }
     } else {
-      // Respond with an error if name or openID is not provided
       res.status(400);
       res.json({ message: 'Fail.' });
       throw new Error('Name and openID are required.');
     }
   } catch (error) {
-    // Handle any errors that occur during the process
     console.log(req.body);
     res.status(400);
     res.json({
@@ -57,15 +56,28 @@ export const handleUserRegistration = async (req, res) => {
   }
 };
 
-export const handleUserEvents = async (req, res) => {
-  const { userId } = req.params; // Destructure userId from req.params
+export const getUserProfile = async (req, res) => {
+  const { userId } = req.params;
 
   try {
-    const user = await User.findById(userId).populate('eventsAttended');
+    const user = await User.findById(userId)
+      .populate({
+        path: 'memberProfile',
+        populate: { path: 'memberDetails.coupons memberDetails.discounts' }, // Populate nested paths if needed
+      })
+      .populate('eventsAttended');
 
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      res.status(404).json({ error: 'User not found' });
+      return;
     }
+
+    // Using the isMember property from the User model directly
+    const isMember = user.isMember;
+    const membershipExpirationDate =
+      isMember && user.memberProfile
+        ? user.memberProfile.membershipExpirationDate
+        : null;
 
     const now = new Date();
     const currentEvents = user.eventsAttended.filter(
@@ -75,8 +87,15 @@ export const handleUserEvents = async (req, res) => {
       event => new Date(event.date) < now
     );
 
-    res.json({ currentEvents, pastEvents });
+    res.json({
+      name: user.name,
+      isMember,
+      membershipExpirationDate,
+      currentEvents,
+      pastEvents,
+    });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };

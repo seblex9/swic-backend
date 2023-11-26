@@ -10,11 +10,6 @@ const discountSchema = new mongoose.Schema({
     max: 100,
   },
   expirationDate: { type: Date, required: true },
-  discountCode: {
-    type: String,
-    required: true,
-    unique: true,
-  },
 });
 
 const Discount = mongoose.model('Discount', discountSchema);

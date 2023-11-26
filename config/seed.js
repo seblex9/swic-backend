@@ -1,53 +1,73 @@
 import mongoose from 'mongoose';
 import connectDB from './db.js';
 import dotenv from 'dotenv';
-dotenv.config();
 import User from '../models/userModel.js';
 import Member from '../models/memberModel.js';
 import Event from '../models/eventModel.js';
 import Discount from '../models/discountModel.js';
 import Coupon from '../models/couponModel.js';
-import {
-  eventSeed,
-  userSeed,
-  memberSeed,
-  discountSeed,
-  couponSeed,
-} from './seed-data.js';
+import { eventSeed, userSeed, discountSeed, couponSeed } from './seed-data.js';
+
+dotenv.config();
 
 const seedDB = async () => {
-  await connectDB();
+  try {
+    await connectDB();
 
-  // Clear the existing data
-  await User.deleteMany({});
-  await Member.deleteMany({});
-  await Event.deleteMany({});
-  await Discount.deleteMany({});
-  await Coupon.deleteMany({});
+    // Clear the existing data
+    await User.deleteMany({});
+    await Member.deleteMany({});
+    await Event.deleteMany({});
+    await Discount.deleteMany({});
+    await Coupon.deleteMany({});
 
-  // Seed new data
-  await Event.insertMany(eventSeed);
-  const wineAndCheeseEvent = await Event.findOne({
-    title: 'Wine and Cheese Soiree',
-  });
-  const majiangSocialEvent = await Event.findOne({
-    title: 'Majiang Social',
-  });
-  await User.insertMany(
-    userSeed.map(user => {
-      if (user.name === 'Alice Johnson') {
-        user.eventsAttended.push(wineAndCheeseEvent._id);
-        user.eventsAttended.push(majiangSocialEvent._id);
-      }
-      return user;
-    })
-  );
-  await Member.insertMany(memberSeed);
-  await Discount.insertMany(discountSeed);
-  await Coupon.insertMany(couponSeed);
+    // Seed new Event data and store the inserted events
+    const insertedEvents = await Event.insertMany(eventSeed);
+
+    // Seed new User data
+    let insertedUsers = await User.insertMany(userSeed);
+
+    // Create and insert the Member document for Alice Johnson
+    const aliceUserId = insertedUsers.find(
+      user => user.name === 'Alice Johnson'
+    )._id;
+    const aliceMemberData = {
+      userAccount: aliceUserId,
+      // ...other member fields...
+      signupDate: new Date(),
+      membershipExpirationDate: new Date(
+        new Date().setFullYear(new Date().getFullYear() + 1)
+      ),
+    };
+    const aliceMember = new Member(aliceMemberData);
+    const savedAliceMember = await aliceMember.save();
+
+    // Update Alice Johnson's User document with the correct memberProfile ObjectId
+    await User.findByIdAndUpdate(aliceUserId, {
+      memberProfile: savedAliceMember._id,
+    });
+
+    // Assign Alice to the first two events in the eventsSeed array
+    await User.findByIdAndUpdate(aliceUserId, {
+      $push: {
+        eventsAttended: {
+          $each: [insertedEvents[0]._id, insertedEvents[1]._id],
+        },
+      },
+    });
+
+    // Seed Discount and Coupon data
+    await Discount.insertMany(discountSeed);
+    await Coupon.insertMany(couponSeed);
+
+    console.log('Seeding complete!');
+  } catch (error) {
+    console.error('Seeding failed:', error);
+  } finally {
+    await mongoose.disconnect();
+  }
 };
 
-seedDB().then(() => {
-  mongoose.disconnect(); // Optionally disconnect if you want to close the script after seeding
-  console.log('Seeding complete!');
+seedDB().catch(error => {
+  console.error('Seeding encountered an error:', error);
 });

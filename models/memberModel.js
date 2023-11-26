@@ -1,6 +1,18 @@
 import mongoose from 'mongoose';
 
 const memberSchema = new mongoose.Schema({
+  signupDate: {
+    type: Date,
+    default: Date.now,
+  },
+  membershipExpirationDate: {
+    type: Date,
+    required: [true, 'Membership expiration date is required.'],
+    default: function () {
+      return new Date(this.signupDate.getTime() + 365 * 24 * 60 * 60 * 1000);
+    },
+  },
+
   userAccount: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -59,7 +71,7 @@ const memberSchema = new mongoose.Schema({
     },
     enum: [
       '0-24 months',
-      '2-3 years',
+      '2-5 years',
       '6-11 years',
       '12-15 years',
       '16 years +',
