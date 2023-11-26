@@ -131,7 +131,6 @@ export const discountSeed = [
     description: 'Buy one coffee, get the second one free!',
     discountAmount: 50, // 50% off for the second coffee
     expirationDate: new Date('2023-10-15T23:59:59.999Z'),
-    discountCode: 'COFFEEBOGO',
   },
   {
     retailer: 'Fitness Center',
